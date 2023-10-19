@@ -1,23 +1,32 @@
 "use client";
+
 import { FileOrDirectoryType } from "@/store/file.store";
-import { File, Folder } from "lucide-react";
-import { FC } from "react";
+import { File, Folder, FolderOpen } from "lucide-react";
+import { FC, useState } from "react";
+import { Toggle } from "@/components/ui/toggle";
 
 interface FileListItemProps {
   data: FileOrDirectoryType;
 }
 export const FileListItem: FC<FileListItemProps> = ({ data }) => {
+  const [pressed, setPressed] = useState(false);
+
   const content = () => {
     if (data.kind === "directory") {
-      // TODO: when folder clicked -> Toggle
-      {
-        /* <FolderOpen />  */
-      }
       return (
-        <>
-          <Folder className="w-4" />
+        <Toggle
+          className="flex justify-start items-center w-full gap-2 hover:bg-slate-100 p-0"
+          onPressedChange={(isPressed) => {
+            setPressed(isPressed);
+          }}
+        >
+          {pressed ? (
+            <FolderOpen className="w-4" />
+          ) : (
+            <Folder className="w-4" />
+          )}
           {data.name}
-        </>
+        </Toggle>
       );
     }
 
@@ -32,7 +41,7 @@ export const FileListItem: FC<FileListItemProps> = ({ data }) => {
   };
 
   return (
-    <div className="pl-2 cursor-pointer flex justify-start items-end gap-2 hover:bg-slate-100 rounded-md transition-colors">
+    <div className="pl-1 cursor-pointer flex justify-start items-center gap-2 hover:bg-slate-100 rounded-md transition-colors">
       {content()}
     </div>
   );

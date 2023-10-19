@@ -27,7 +27,7 @@ const Playground: FC = () => {
         </Button>
       </nav>
 
-      <div className="flex  rounded-md h-full w-full">
+      <div className="flex rounded-md h-full w-full">
         {/* File tree */}
         <section className="w-1/6 rounded-md border py-2 px-1">
           <FileList />
