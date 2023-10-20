@@ -14,7 +14,7 @@ type FileStore = {
   rootFiles: FileOrDirectoryType[];
 
   getDirectoryFiles: (
-    dirHandle: FileSystemDirectoryHandle
+    dirHandle: FileSystemDirectoryHandle,
   ) => Promise<FileOrDirectoryType[] | undefined>;
   pickRootDirectory: () => Promise<void>;
 
@@ -35,7 +35,9 @@ export const useFileStore = create<FileStore>()(
 
         const files: FileOrDirectoryType[] = [];
         for await (const fileOrDir of handle.values()) {
-          files.push(fileOrDir);
+          if (!fileOrDir.name.startsWith(".")) {
+            files.push(fileOrDir);
+          }
         }
 
         set({
@@ -74,5 +76,5 @@ export const useFileStore = create<FileStore>()(
         rootFiles: files || [],
       });
     },
-  })
+  }),
 );
