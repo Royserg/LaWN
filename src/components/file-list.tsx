@@ -1,14 +1,18 @@
 "use client";
 
-import { useFileStore } from "@/store/file.store";
+import { FileOrDirectoryType } from "@/store/file.store";
 import { FC } from "react";
 import { FileListItem } from "./file-list-item";
+import { cn } from "@/lib/utils";
 
-const FileList: FC = () => {
-  const files = useFileStore((state) => state.rootFiles);
+interface FileListProps {
+  files: FileOrDirectoryType[];
+  className?: string;
+}
 
+const FileList: FC<FileListProps> = ({ files, className }) => {
   return (
-    <div className="flex flex-col gap-1">
+    <div className={cn("flex flex-col gap-1", className)}>
       {files.map((file, idx) => {
         return <FileListItem key={idx} data={file} />;
       })}

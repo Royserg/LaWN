@@ -9,9 +9,11 @@ import { FileList } from "./file-list";
 const Playground: FC = () => {
   const pickRootDirectory = useFileStore((state) => state.pickRootDirectory);
   const initializeFileStore = useFileStore((state) => state.initializeStore);
+  const rootFiles = useFileStore((state) => state.rootFiles);
 
   useEffect(() => {
     initializeFileStore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const pickDirectory = async () => {
@@ -29,8 +31,8 @@ const Playground: FC = () => {
 
       <div className="flex rounded-md h-full w-full">
         {/* File tree */}
-        <section className="w-1/6 rounded-md border py-2 px-1">
-          <FileList />
+        <section className="w-1/6 rounded-md border py-2 px-1 overflow-scroll">
+          <FileList files={rootFiles} />
         </section>
 
         {/* Content */}
@@ -39,6 +41,6 @@ const Playground: FC = () => {
     </main>
   );
 };
-Playground.displayName = "Files";
+Playground.displayName = "Playground";
 
 export { Playground };
