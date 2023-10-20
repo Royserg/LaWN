@@ -1,3 +1,3 @@
 # LaWN
 
-![touch grass](https://media.tenor.com/CW-0A0q-6ksAAAAd/touching-grass.gif)
+![touching-grass](https://github.com/Royserg/LaWN/assets/16419971/ca540ecd-03d8-4c46-9073-044c57f5bf21)
