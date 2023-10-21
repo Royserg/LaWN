@@ -1,9 +1,9 @@
 "use client";
 
+import { Toggle } from "@/components/ui/toggle";
 import { FileOrDirectoryType, useFileStore } from "@/store/file.store";
 import { File, Folder, FolderOpen } from "lucide-react";
-import { FC, useState } from "react";
-import { Toggle } from "@/components/ui/toggle";
+import { FC, useEffect, useState } from "react";
 import { FileList } from "./file-list";
 
 interface FileListItemProps {
@@ -45,7 +45,7 @@ const ItemDirectory: FC<ItemDirectoryProps> = ({ dirHandle }) => {
   };
   return (
     <>
-      <div className="pl-1 cursor-pointer flex justify-start items-center gap-2 hover:bg-slate-100 rounded-md transition-colors">
+      <div className="pl-1 cursor-pointer hover:bg-slate-100 rounded-md transition-colors">
         <Toggle
           className="flex justify-start items-center w-full gap-2 hover:bg-slate-100 p-0"
           onPressedChange={handleDirectoryClick}
@@ -67,15 +67,41 @@ const ItemDirectory: FC<ItemDirectoryProps> = ({ dirHandle }) => {
 };
 
 // Item File
-
 interface ItemFileProps {
-  fileHandle: FileSystemHandle;
+  fileHandle: FileSystemFileHandle;
 }
 const ItemFile: FC<ItemFileProps> = ({ fileHandle }) => {
+  const [isSelected, setIsSelected] = useState(false);
+
+  const selectFile = useFileStore((s) => s.selectFile);
+  const selectedFile = useFileStore((s) => s.selectedFile);
+
+  const handleFileClick = async () => {
+    selectFile(fileHandle);
+  };
+
+  useEffect(() => {
+    const checkSelected = async () => {
+      if (selectedFile) {
+        const isSelected = await selectedFile.isSameEntry(fileHandle);
+        setIsSelected(isSelected);
+      }
+    };
+
+    checkSelected();
+  }, [selectedFile, fileHandle]);
+
   return (
-    <div className="pl-1 cursor-pointer flex justify-start items-center gap-2 hover:bg-slate-100 rounded-md transition-colors">
-      <File className="w-4" />
-      {fileHandle.name}
+    <div className="pl-1 cursor-pointer hover:bg-slate-100 rounded-md transition-colors">
+      <Toggle
+        className="flex justify-start items-center gap-2 hover:bg-slate-100 p-0 data-[state=on]:bg-slate-200 tracking-tighter w-max"
+        onPressedChange={handleFileClick}
+        pressed={isSelected}
+        size={"sm"}
+      >
+        <File className="w-3" />
+        {fileHandle.name}
+      </Toggle>
     </div>
   );
 };
