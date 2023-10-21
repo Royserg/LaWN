@@ -12,7 +12,7 @@ interface FileListProps {
 
 const FileList: FC<FileListProps> = ({ files, className }) => {
   return (
-    <div className={cn("flex flex-col gap-1", className)}>
+    <div className={cn("w-full flex flex-col gap-1 overflow-auto", className)}>
       {files.map((file, idx) => {
         return <FileListItem key={idx} data={file} />;
       })}
