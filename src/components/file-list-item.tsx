@@ -92,16 +92,17 @@ const ItemFile: FC<ItemFileProps> = ({ fileHandle }) => {
   }, [selectedFile, fileHandle]);
 
   return (
-    <div className="pl-1 cursor-pointer hover:bg-slate-100 rounded-md transition-colors">
-      <Toggle
-        className="flex justify-start items-center gap-2 hover:bg-slate-100 p-0 data-[state=on]:bg-slate-200 tracking-tighter w-max"
-        onPressedChange={handleFileClick}
-        pressed={isSelected}
-        size={"sm"}
-      >
+    <Toggle
+      className="flex justify-start hover:bg-slate-100 p-0 pl-1 data-[state=on]:bg-slate-100 tracking-tighter w-full rounded-md transition-colors"
+      onPressedChange={handleFileClick}
+      pressed={isSelected}
+      size={"sm"}
+    >
+      <div className="w-max flex justify-start items-center gap-2">
         <File className="w-3" />
         {fileHandle.name}
-      </Toggle>
-    </div>
+      </div>
+    </Toggle>
   );
+  // </div>
 };

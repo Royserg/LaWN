@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useFileStore } from "@/store/file.store";
 import { FolderClosed } from "lucide-react";
 import { FC, useEffect } from "react";
-import { FileList } from "./file-list";
 import { Content } from "./content";
+import { FileList } from "./file-list";
 
 const Playground: FC = () => {
   const pickRootDirectory = useFileStore((state) => state.pickRootDirectory);

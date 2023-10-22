@@ -2,6 +2,7 @@
 
 import { useFileStore } from "@/store/file.store";
 import { FC, useEffect, useState } from "react";
+import { Editor } from "./editor";
 
 const Content: FC = () => {
   const selectedFile = useFileStore((s) => s.selectedFile);
@@ -18,9 +19,16 @@ const Content: FC = () => {
     readFileContent();
   }, [selectedFile]);
 
-  return <div>{content}</div>;
-};
+  if (!selectedFile) {
+    return <div className="p-4 text-gray-300">Select file</div>;
+  }
 
+  return (
+    <div className="pt-4">
+      <Editor fileContent={content!} />
+    </div>
+  );
+};
 Content.displayName = "Content";
 
 export { Content };
