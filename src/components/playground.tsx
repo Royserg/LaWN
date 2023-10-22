@@ -5,6 +5,7 @@ import { useFileStore } from "@/store/file.store";
 import { FolderClosed } from "lucide-react";
 import { FC, useEffect } from "react";
 import { FileList } from "./file-list";
+import { Content } from "./content";
 
 const Playground: FC = () => {
   const pickRootDirectory = useFileStore((state) => state.pickRootDirectory);
@@ -31,12 +32,14 @@ const Playground: FC = () => {
 
       <div className="flex rounded-md h-full w-full">
         {/* File tree */}
-        <section className="w-1/6 rounded-md border py-2 px-1 overflow-scroll">
+        <section className="w-1/6 rounded-md border px-1 py-1">
           <FileList files={rootFiles} />
         </section>
 
         {/* Content */}
-        <section className="w-5/6 border border-black rounded-md bg-slate-50"></section>
+        <section className="w-5/6 border border-black rounded-md bg-slate-50">
+          <Content />
+        </section>
       </div>
     </main>
   );
