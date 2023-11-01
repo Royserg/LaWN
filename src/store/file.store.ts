@@ -14,6 +14,9 @@ type FileStore = {
   rootFiles: FileOrDirectoryType[];
   selectedFile: FileSystemFileHandle | null;
 
+  editorValue: string;
+  setEditorValue: (value: string) => void;
+
   getDirectoryFiles: (
     dirHandle: FileSystemDirectoryHandle,
   ) => Promise<FileOrDirectoryType[] | undefined>;
@@ -21,18 +24,72 @@ type FileStore = {
   selectFile: (fileHandle: FileSystemFileHandle) => void;
 
   saveContentToFile: (content: string) => void;
-  createInMemoryFile: (name: string) => void;
+  createFile: (name: string) => void;
 
   initializeStore: () => Promise<void>;
 };
 
 export const useFileStore = create<FileStore>()((set, get) => ({
-  createInMemoryFile: async (name) => {
-    console.log("NEW FILE NAME: ", name);
-    // TODO: this has error that FileSystemFileEntry doesn't exist
-    const file = new FileSystemFileEntry();
-    console.log("FILE", file);
-    // file.name = ''
+  editorValue: "",
+  setEditorValue: (value) => {
+    set({
+      editorValue: value,
+    });
+  },
+
+  createFile: async (name) => {
+    const rootDirHandle = get().rootDirHandle;
+
+    if (!rootDirHandle) {
+      console.error("Root directory missing.");
+      return;
+    }
+
+    // NOTE: Doesn't create new file if the name already exists
+    const fileExt = ".md";
+    const newFile = await rootDirHandle.getFileHandle(`${name}${fileExt}`, {
+      create: true,
+    });
+
+    set({
+      rootFiles: [...get().rootFiles, newFile],
+    });
+  },
+
+  saveContentToFile: async (content) => {
+    // NOTE: create a new handle (user chooses destination)
+    // const fileHandle = await window.showSaveFilePicker({
+    //   startIn: "desktop",
+    //   suggestedName: "lawn-file",
+    //   types: [
+    //     {
+    //       description: "markdown",
+    //       accept: {
+    //         "text/markdown": [".md"],
+    //       },
+    //     },
+    //   ],
+    // });
+    // console.log("fileHandle", fileHandle);
+    //
+    // set({
+    //   rootFiles: [...get().rootFiles, fileHandle],
+    // });
+
+    // create a FileSystemWritableFileStream to write to
+    const selectedFile = get().selectedFile;
+    if (!selectedFile) {
+      console.error("No file selected");
+      return;
+    }
+
+    const writableStream = await selectedFile.createWritable();
+
+    // write our file
+    await writableStream.write(content);
+
+    // close the file and write the contents to disk.
+    await writableStream.close();
   },
 
   rootDirHandle: null,
@@ -73,36 +130,6 @@ export const useFileStore = create<FileStore>()((set, get) => ({
     } catch (err) {
       console.log("Reading directory files error:", err);
     }
-  },
-
-  saveContentToFile: async (content) => {
-    // create a new handle
-    const fileHandle = await window.showSaveFilePicker({
-      startIn: "desktop",
-      suggestedName: "lawn-file",
-      types: [
-        {
-          description: "markdown",
-          accept: {
-            "text/markdown": [".md"],
-          },
-        },
-      ],
-    });
-
-    console.log("fileHandle", fileHandle);
-    set({
-      rootFiles: [...get().rootFiles, fileHandle],
-    });
-
-    // create a FileSystemWritableFileStream to write to
-    const writableStream = await fileHandle.createWritable();
-
-    // write our file
-    await writableStream.write(content);
-
-    // close the file and write the contents to disk.
-    await writableStream.close();
   },
 
   selectFile: (fileHandle) => {

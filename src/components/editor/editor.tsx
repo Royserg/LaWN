@@ -19,6 +19,7 @@ import Heading from "@tiptap/extension-heading";
 import BulletList from "@tiptap/extension-bullet-list";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
+import { useFileStore } from "@/store/file.store";
 
 import { micromark } from "micromark";
 import { gfm, gfmHtml } from "micromark-extension-gfm";
@@ -29,6 +30,8 @@ interface EditorProps {
 }
 
 const Editor: FC<EditorProps> = ({ fileContent }) => {
+  const setEditorValue = useFileStore((s) => s.setEditorValue);
+
   const editor = useEditor({
     extensions: [
       Document,
@@ -67,7 +70,8 @@ const Editor: FC<EditorProps> = ({ fileContent }) => {
       // which appears in the output String as "* # \[ ] todo item"
       const parsed = stringMd.replaceAll("* # ", "- ").replaceAll("\\[", "[");
 
-      console.log("parsed:", parsed);
+      // console.log("parsed:", parsed);
+      setEditorValue(parsed);
     },
   });
 

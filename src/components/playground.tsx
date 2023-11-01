@@ -13,6 +13,7 @@ const Playground: FC = () => {
   const initializeFileStore = useFileStore((state) => state.initializeStore);
   const rootFiles = useFileStore((state) => state.rootFiles);
   const saveContentToFile = useFileStore((state) => state.saveContentToFile);
+  const editorValue = useFileStore((state) => state.editorValue);
 
   useEffect(() => {
     initializeFileStore();
@@ -36,11 +37,8 @@ const Playground: FC = () => {
         <Button
           variant={"outline"}
           size={"sm"}
-          onClick={() =>
-            saveContentToFile(
-              "# Heading 1\n## Heading 2\n - [ ] Todo 1\n - [x] todo completed",
-            )
-          }
+          // TODO: add visual feedback about save action
+          onClick={() => saveContentToFile(editorValue)}
         >
           Save
         </Button>

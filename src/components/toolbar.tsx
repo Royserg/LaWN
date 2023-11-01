@@ -13,15 +13,18 @@ import {
 import { Input } from "@/components/ui/input";
 
 const Toolbar: FC = () => {
+  const rootDirHandle = useFileStore((s) => s.rootDirHandle);
+
   return (
     <div className="flex gap-2 border-b rounded-sm px-1">
-      <AddFileButton />
+      {rootDirHandle && <AddFileButton />}
     </div>
   );
 };
 
 const AddFileButton: FC = () => {
-  const createInMemoryFile = useFileStore((s) => s.createInMemoryFile);
+  const [open, setOpen] = useState(false);
+  const createFile = useFileStore((s) => s.createFile);
   const [filename, setFilename] = useState("");
 
   const handleAddNewFile = () => {
@@ -30,14 +33,15 @@ const AddFileButton: FC = () => {
     }
 
     try {
-      createInMemoryFile(filename);
+      createFile(filename);
+      setOpen(false);
     } catch (err) {
-      console.error("Creating in memory file failed", err);
+      console.error("Creating file failed", err);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={"ghost"} size={"sm"} className="p-0">
           <FilePlus2 className="w-4" />
