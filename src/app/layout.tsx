@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { GeistSans, GeistMono } from "geist/font";
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "lawn",
@@ -16,7 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${GeistMono.className}, ${GeistSans.className}`}>
+        {children}
+      </body>
     </html>
   );
 }
